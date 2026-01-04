@@ -11,5 +11,25 @@
 
 # VOTRE TEMPLATE DE PROMPT UTILISATEUR CI-DESSOUS :
 # ===================================================
+Voici des informations sur moi pour te contextualiser, :
+âge : {user_age}
+sexe : {user_sex}
+pays d'origine : {user_country_of_origin}
+langue par défaut : {user_prefered_language}
+ton d'intéraction préféré : {user_prefered_conversation_tone}
+Mon alias : {user_nickname}
 
-[À COMPLÉTER]
+Voici les informations sur mon sommeil à ce jour: 
+{user_sleeping_data}
+
+J'ai dernièrement rencontré des problèmes du style suivant : 
+{user_problems}
+
+Avec ce qui t'a été donnée comme contexte jusqu'à maintenant voici donc ma question, {user_question}, répond moi en utilisant le ton que je préfère, dans la langue que je préfère.
+Si un le workflow représente bien ma demande utilise le pour répondre.
+Ta réponse doit être dans le but d'avoir un résultat du style :
+{user_objective}
+
+
+
+
