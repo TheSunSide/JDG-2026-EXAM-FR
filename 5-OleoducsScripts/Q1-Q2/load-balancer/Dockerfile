@@ -15,13 +15,15 @@ FROM node:24-slim
 WORKDIR /app
 
 # Copy compiled JavaScript from the builder stage
-COPY --from=builder /app/dist ./dist 
+COPY --from=builder /app/dist ./dist
 COPY package.json package-lock.json my-deployment-configs.json ./
 RUN npm install --production
 
 RUN ls .
 
 # TODO Student: Expose application port
+EXPOSE 3001
 
 # TODO Student: Run the application using node
+CMD ["node", "./dist/index.ts"]
 ## HINT: you need dist/index.js...

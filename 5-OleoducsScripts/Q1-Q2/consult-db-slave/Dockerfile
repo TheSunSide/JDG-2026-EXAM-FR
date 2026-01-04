@@ -27,11 +27,13 @@ RUN sed -i 's/^protected-mode yes/protected-mode no/' /etc/redis/redis.conf
 WORKDIR /app
 
 # Copy compiled JavaScript from the builder stage
-COPY --from=builder /app/dist ./dist 
+EXPOSE 3000
+COPY --from=builder /app/dist ./dist
 COPY package.json package-lock.json my-deployment-configs.json ./
 RUN npm install --production
 
 ## HINT: you need /dist/index.js...
 
 # TODO STUDENT: Start the apps
-ENTRYPOINT [ "echo", "hello from my app" ]
+#ENTRYPOINT [ "echo", "hello from my app" ]
+CMD ["node", "./dist/index.js"]

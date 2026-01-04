@@ -37,25 +37,30 @@ void* producteur(void* pid) {
     int nbGen = 0;
 
     for (;;) {
-        sem_wait(&tokenAcces);
+        // sem_wait(&tokenAcces); 
+        // Problème : un producteur décrémente le sémaphore d'accès au buffer (le mutex de Temu) avant même de "savoir" s'il peut produire.
+        // Alors, quand les producteurs ne peuvent plus produire, il bloquent l'accès au buffer et le programme se retrouve en deadlock (car consommateurs ne peuvent pas consommer).
+        // Solution : le producteur doit d'abord être en état de produire avant d'utiliser le sémaphore Access (mutex de Dollorama) 
         sem_wait(&tokenProd);
 
         if (flag_de_fin) {
-            sem_post(&tokenAcces);
             sem_post(&tokenProd);
             break;
         }
 
         char val = '0' + rand() % 10;
+
+        // On utilise les sémaphores uniquement pour les opérations nécéssaire (ici c'est juste utiliser le buffer)
+        sem_wait(&tokenAcces); 
         bufferChiffres[ip] = val;
+        sem_post(&tokenAcces);
+        sem_post(&tokenConsom);
+
         printf("[Prod %ld] produit '%c' à pos %d\n", id, val, ip);
 
         nbGen++;
         nbTotalGen++;
         ip = (ip + 1) % tailleTampon;
-
-        sem_post(&tokenAcces);
-        sem_post(&tokenConsom);
     }
 
     printf("Producteur %ld a produit %d lettres\n", id, nbGen);
@@ -68,14 +73,16 @@ void* consommateur(void* cid) {
 
     for (;;) {
         sem_wait(&tokenConsom);
+        
+        // On utilise les sémaphores uniquement pour les opérations nécéssaire (ici c'est juste utiliser le buffer)
         sem_wait(&tokenAcces);
-
         int valeurConsom = bufferChiffres[ic];
+        sem_post(&tokenAcces);
+        sem_post(&tokenProd);
+
         printf("[Cons %ld] consomme '%c' à pos %d\n", id, (valeurConsom ? valeurConsom : '-'), ic);
 
         ic = (ic + 1) % tailleTampon;
-        sem_post(&tokenAcces);
-        sem_post(&tokenProd);
 
         if (valeurConsom == 0) {
             break;
@@ -122,7 +129,7 @@ int main(int argc, char* argv[]) {
     alarm(5); // Adjust to see race conditions between producers and consumers
 
     while (!flag_de_fin) {
-        sleep(5000);
+        sleep(100);
     }
     for (int i = 0; i < nProd; ++i) {
         sem_post(&tokenProd);

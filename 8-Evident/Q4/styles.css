@@ -2,10 +2,10 @@ body{font-family:'Times New Roman', serif;color:#464646;margin:0;padding:0}
 header{padding:10px;display:flex;align-items:center;justify-content:space-between}
 header h1{font-size:20px;margin:0}
 nav button{margin-left:8px;background:transparent;border:1px solid #ccc;padding:4px}
-main{display:flex;gap:10px;padding:12px}
-#form-area{flex:2;padding:8px}
+main{display:block;gap:10px;padding:12px}
+#form-area{flex:2;padding:8px; width:500px}
 #form-area h2{font-size:18px}
-#metrics{flex:1;padding:8px}
+#metrics{flex:1;padding:8px; width:500px}
 #metrics h2{font-size:18px}
 #recommendations{flex:1;padding:8px}
 #recommendations h2{font-size:18px}
