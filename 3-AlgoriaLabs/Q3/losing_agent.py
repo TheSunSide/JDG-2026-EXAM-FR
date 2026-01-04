@@ -30,6 +30,8 @@ class LosingAgent(Agent):
         """
         super().__init__(player)
         # TODO: Ajouter les attributs nécessaires
+        self.player = player
+        self.exploredNodes = 0
         pass
     
     def make_move(self, board: TicTacToeBoard) -> int:
@@ -44,7 +46,12 @@ class LosingAgent(Agent):
         """
         # TODO: Implémenter la logique de choix sous-optimal
         # Cette méthode doit retourner un coup qui maximise les chances de perdre
+        self.exploredNodes = 0
         valid_moves = board.get_valid_moves()
+        for move in valid_moves:
+            self.exploredNodes+=1
+            board.make_move()
+
         if not valid_moves:
             raise ValueError("Aucun coup valide disponible")
         
